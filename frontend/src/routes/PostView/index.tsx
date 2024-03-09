@@ -48,7 +48,7 @@ const PostView = () => {
             {loading && (
                 <div className="flex flex-col gap-2 p-4">
                     {Array.from({ length: 5 }, (_, i) => i + 1).map((i) => (
-                        <div className="h-[1.5rem] w-[88vw] bg-slate-100 animate-pulse rounded-md"></div>
+                        <div key={`loading-idx-${i}`} className="h-[1.5rem] w-[88vw] bg-slate-100 animate-pulse rounded-md"></div>
                     ))}
                 </div>
             )}
@@ -56,6 +56,7 @@ const PostView = () => {
                 <div className="flex flex-col gap-2  w-full sm:p-[24px] p-[16px]">
                     {records.map((record) => (
                         <PostItemComponent
+                            key={`post-id-${record.id}`}
                             onShowModal={() => setSelectedID(record.id)}
                             onHideModal={() => setSelectedID(null)}
                             contentVisible={selectedID !== null && record.id === selectedID}

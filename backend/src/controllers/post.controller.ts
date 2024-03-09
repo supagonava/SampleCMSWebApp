@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { getRepository } from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
+import { ExpressRequest } from 'interfaces/request.interface';
 
 class PostController {
-    list = async (req: Request, res: Response) => {
+    list = async (req: ExpressRequest, res: Response) => {
         const postRepository = getRepository(PostEntity);
         const { search, sort, tag, per_page, page } = req.query;
 

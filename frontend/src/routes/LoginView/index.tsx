@@ -1,3 +1,4 @@
+import config from "@/config";
 import AuthAPIService from "@/modules/auth.api";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -20,7 +21,7 @@ const LoginView = () => {
                 localStorage.setItem("access_token", signinResponse.data.access_token.token);
                 localStorage.setItem("access_token_expires_at", signinResponse.data.access_token.expires_at);
                 await Swal.fire({ text: signinResponse.data.message, icon: "success", timer: 2000 });
-                naviate("/posts");
+                window.open(config.ROUTE_NAMES.post, "_self");
             } else {
                 Swal.fire({ text: signinResponse.data.message, icon: "error" });
             }

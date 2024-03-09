@@ -1,30 +1,22 @@
 import { Button } from "primereact/button";
-import React, { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router";
-import config from "@/config";
+import React, { useContext } from "react";
+import { Outlet } from "react-router";
 import { FaSignOutAlt } from "react-icons/fa";
+import AuthContext from "@/contexts/auth.context";
 
-const LoginLayoutComponent = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const handleSignOut = () => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("access_token_expires_at");
-        return navigate(config.ROUTE_NAMES.login);
-    };
-    // handle route
-    useEffect(() => {
-        if (location.pathname === "/") navigate(config.ROUTE_NAMES.login);
-    }, []);
+const LoginLayoutComponent = ({ handleSignout }: { handleSignout: () => void }) => {
+    const { username } = useContext(AuthContext);
 
     return (
         <div className="w-full min-h-screen flex flex-col">
             <div className="h-[80px] bg-primary flex justify-between items-center px-2">
                 <div className="w-1/3" />
-                <p className="text-white font-bold text-[2rem] text-center w-1/3">Skin-X</p>
+                <div className="flex flex-col items-center w-1/3">
+                    <p className="text-white font-bold text-[2rem] text-center">Skin-X</p>
+                    <p className="text-white font-bold text-[1rem] text-center">ยินดีต้อนรับ {username}</p>
+                </div>
                 <div className="w-1/3 flex justify-end">
-                    <Button onClick={() => handleSignOut()} size="small" severity="danger">
+                    <Button onClick={() => handleSignout()} size="small" severity="danger">
                         <FaSignOutAlt />
                     </Button>
                 </div>

@@ -46,7 +46,7 @@ function PostItemComponent({ record, contentVisible, onHideModal, onShowModal }:
 
     return (
         <div key={`post-${record.id}`} className="flex flex-col border-b py-2 w-full">
-            <Dialog closable={false} header={DialogHeader} className="sm:w-1/2 w-11/12" onHide={() => onHideModal()} visible={contentVisible}>
+            <Dialog closable={false} header={DialogHeader} className="sm:w-1/2 lg:w-1/3 w-full" draggable={false} position="top" onHide={() => onHideModal()} visible={contentVisible}>
                 {DialogContent}
             </Dialog>
 

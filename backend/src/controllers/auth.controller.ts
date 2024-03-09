@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { getRepository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { ExpressRequest } from '../interfaces/request.interface';
 
 class AuthController {
-    public async signin(req: Request, res: Response) {
+    public async signin(req: ExpressRequest, res: Response) {
         try {
             const { username, password } = req.body;
 
@@ -34,16 +35,20 @@ class AuthController {
         }
     }
 
-    public async refresh(req: Request, res: Response) {
-        const { refreshToken } = req.body;
+    public async me(req: ExpressRequest, res: Response) {
+        return res.json({ user: req?.user });
+    }
 
-        if (!refreshToken) {
+    public async refresh(req: ExpressRequest, res: Response) {
+        const token = req?.token;
+
+        if (!token) {
             return res.status(401).json({ message: 'Token is required!' });
         }
 
         try {
             // Verify the token, but ignore expiration
-            const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET || 'development', { ignoreExpiration: true });
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'development', { ignoreExpiration: true });
             const { username, id } = JSON.parse(JSON.stringify(decoded));
 
             const expiresIn = 3600;
