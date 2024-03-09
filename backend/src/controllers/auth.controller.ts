@@ -1,18 +1,65 @@
-import '../types/custom.d.ts';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { getRepository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
 
 class AuthController {
-    public async login(req: Request, res: Response) {
-        const user = { id: 1, username: 'user', email: 'user@example.com' };
+    public async signin(req: Request, res: Response) {
+        try {
+            const { username, password } = req.body;
 
-        // Sign JWT token
-        const token = jwt.sign({ user }, `${process.env.JWT_SECRET || 'development'}`, { expiresIn: '1h' });
-        res.json({ message: 'Logged in successfully', token });
+            const UserRepository = getRepository(UserEntity);
+            const existUser = await UserRepository.findOneBy({ username: username });
+            if (existUser) {
+                const checkedPassword = await bcrypt.compare(password, existUser.password);
+                if (checkedPassword) {
+                    const userObjectData = { username: existUser.username, id: existUser.id };
+
+                    const expiresIn = 3600; // 1 hour in seconds
+                    const token = jwt.sign(userObjectData, `${process.env.JWT_SECRET || 'development'}`, { expiresIn: expiresIn });
+                    const expirationTime = Math.floor(Date.now() / 1000) + expiresIn;
+
+                    return res.status(200).json({
+                        message: 'Logged in successfully',
+                        access_token: { token, expires_at: expirationTime },
+                        user: userObjectData
+                    });
+                }
+            }
+            return res.status(401).json({ message: 'Username or password incorrect!' });
+        } catch (error) {
+            return res.status(500).json({ message: `Error ${error}` });
+        }
     }
 
-    public async verifyToken(req: Request, res: Response, next: Function) { }
+    public async refresh(req: Request, res: Response) {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(401).json({ message: 'Token is required!' });
+        }
+
+        try {
+            // Verify the token, but ignore expiration
+            const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET || 'development', { ignoreExpiration: true });
+            const { username, id } = JSON.parse(JSON.stringify(decoded));
+
+            const expiresIn = 3600;
+            const newAccessToken = jwt.sign({ username: username, id: id }, `${process.env.JWT_SECRET || 'development'}`, { expiresIn: expiresIn });
+            const expirationTime = Math.floor(Date.now() / 1000) + expiresIn;
+
+            return res.status(200).json({
+                message: 'Access Token refreshed successfully',
+                access_token: newAccessToken,
+                expirationTime
+            });
+        } catch (error) {
+            // Handle invalid token cases
+            return res.status(403).json({ message: 'Invalid Token' });
+        }
+    }
 }
 
-export default new AuthController();
+export default AuthController;

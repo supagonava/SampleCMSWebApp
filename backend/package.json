@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "build": "npx tsc",
-        "db:seed": "ts-node src/commands/db_seed_posts.ts",
+        "db:seed-post": "ts-node src/commands/db_seed_posts.ts",
+        "db:seed-user": "ts-node src/commands/db_seed_users.ts",
         "start": "node dist/index.js",
         "dev": "nodemon index.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,11 +15,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@types/bcrypt": "^5.0.2",
         "@types/compression": "^1.7.5",
         "@types/cookie-parser": "^1.4.7",
         "@types/cors": "^2.8.17",
         "@types/jsonwebtoken": "^9.0.6",
         "@types/morgan": "^1.9.9",
+        "bcrypt": "^5.1.1",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
