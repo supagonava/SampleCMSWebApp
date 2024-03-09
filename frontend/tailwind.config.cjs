@@ -1,0 +1,40 @@
+module.exports = {
+    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+    theme: {
+        extend: {
+            colors: {
+                primary: "#59ccc2",
+                secondary: "#fc8e91",
+                "primary-shade-1": "#0C3BBE",
+                "primary-shade-2": "#0738A6",
+                "primary-shade-3": "#042D7D",
+                "primary-shade-4": "#021F4B",
+                "secondary-shade-1": "#D03D00",
+                "secondary-shade-2": "#BF3600",
+                "secondary-shade-3": "#8B2A00",
+                "secondary-shade-4": "#5E1C00",
+                "neutral-shade-1": "#555555",
+                "neutral-shade-2": "#333333",
+                danger: "#e61111",
+            },
+            backgroundSize: {
+                auto: "auto",
+                cover: "cover",
+                contain: "contain",
+                "50%": "50%",
+                16: "4rem",
+            },
+            screens: {
+                xs: "375px",
+                sm: "540px",
+                md: "960px",
+                lg: "1140px",
+                xl: "1240px",
+                "2xl": "1340px",
+                "3xl": "1440px",
+                "4xl": "1540px",
+            },
+        },
+    },
+    plugins: [],
+};
