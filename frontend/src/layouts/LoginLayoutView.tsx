@@ -13,7 +13,7 @@ const LoginLayoutComponent = () => {
     }, []);
 
     return (
-        <div className="w-[99vw] h-screen flex flex-col">
+        <div className="w-full min-h-screen flex flex-col">
             <div className="h-[80px] bg-primary flex justify-between items-center px-2">
                 <div className=""></div>
                 <p className="text-white font-bold text-[2rem]">SkinX Posts</p>
