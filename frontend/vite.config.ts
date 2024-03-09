@@ -13,7 +13,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
-  server: { port: 4000 },
+  server: { port: parseInt(process.env.PORT || "3000") },
   define: {
     'process.env': process.env,
   },

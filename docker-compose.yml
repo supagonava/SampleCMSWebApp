@@ -28,6 +28,7 @@ services:
         environment:
             REACT_APP_ENV: DEVELOPMENT
             REACT_APP_API: http://backend:8000
+            REACT_APP_PORT: 3000
 
     db:
         image: postgres:latest

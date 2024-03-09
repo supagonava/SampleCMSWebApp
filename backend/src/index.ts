@@ -1,6 +1,6 @@
-import App from './src/app';
-import AuthRoute from './src/routes/auth.route';
-import PostRoute from './src/routes/post.route';
+import App from './app';
+import AuthRoute from './routes/auth.route';
+import PostRoute from './routes/post.route';
 
 const postRoute = new PostRoute();
 const authRoute = new AuthRoute();

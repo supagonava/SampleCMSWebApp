@@ -7,8 +7,8 @@
         "build": "npx tsc",
         "db:seed-post": "ts-node src/commands/db_seed_posts.ts",
         "db:seed-user": "ts-node src/commands/db_seed_users.ts",
-        "start": "node dist/index.js",
-        "dev": "nodemon index.ts",
+        "start": "node ./dist/index.js",
+        "dev": "nodemon ./src/index.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
