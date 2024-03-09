@@ -14,6 +14,7 @@ class PostRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`, authMiddleware, this.controller.list);
+        this.router.get(`${this.path}/tags`, authMiddleware, this.controller.listTags);
     }
 }
 

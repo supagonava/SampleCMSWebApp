@@ -1,12 +1,20 @@
 import { Response } from 'express';
 import { getRepository } from 'typeorm';
 import { PostEntity } from '../entities/post.entity';
-import { ExpressRequest } from 'interfaces/request.interface';
+import { TagEntity } from '../entities/tag.entity';
+import { ExpressRequest } from '../interfaces/request.interface';
 
 class PostController {
-    list = async (req: ExpressRequest, res: Response) => {
+
+    public async listTags(req: ExpressRequest, res: Response) {
+        const tagRepo = getRepository(TagEntity);
+        const tags = await tagRepo.find();
+        return res.json({ data: tags })
+    }
+
+    public async list(req: ExpressRequest, res: Response) {
         const postRepository = getRepository(PostEntity);
-        const { search, sort, tag, per_page, page } = req.query;
+        const { search, sort: order_by, order_by_direction, tags, per_page, page } = req.query;
 
         const take = per_page ? parseInt(per_page.toString(), 10) : 10;
         const skip = page && take ? (parseInt(page.toString(), 10) - 1) * take : 0;
@@ -17,21 +25,26 @@ class PostController {
             // Join and select tags for each post
             queryBuilder.leftJoinAndSelect('post.tags', 'tag');
 
-            if (tag) {
-                // Filter posts by tag
-                queryBuilder.andWhere('tag.name = :tagName', { tagName: tag });
+            if (tags) {
+                let tagsArray: string[];
+
+                if (Array.isArray(tags)) {
+                    tagsArray = tags.map((tag) => typeof tag === 'string' ? tag : String(tag));
+                } else {
+                    tagsArray = [typeof tags === 'string' ? tags : String(tags)];
+                }
+                queryBuilder.andWhere('tag.tag in (:...tags)', { tags: tagsArray });
             }
 
             if (search) {
-                queryBuilder.andWhere('(post.title LIKE :search OR post.content LIKE :search)', { search: `%${search}%` });
+                queryBuilder.andWhere('(post.title LIKE :search)', { search: `%${search}%` });
             }
 
-            if (sort) {
-                queryBuilder.orderBy('post.title', sort.toString().toUpperCase() === 'DESC' ? 'DESC' : 'ASC');
+            if (order_by) {
+                queryBuilder.orderBy(`post.${order_by}`, "ASC");
             }
 
             queryBuilder.take(take).skip(skip);
-
             const [posts, total] = await queryBuilder.getManyAndCount();
 
             res.json({

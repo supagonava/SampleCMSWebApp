@@ -11,3 +11,17 @@ export interface PostInterface {
     postedBy: string;
     tags: TagInterface[];
 }
+
+export interface QueryInterface {
+    search: string;
+    tags: string[];
+    order_by: string;
+}
+
+
+export interface PaginationInterface {
+    page: number;
+    per_page: number;
+    total: number;
+    start_at: number;
+}
