@@ -35,5 +35,9 @@ COPY --from=builder /usr/src/app/dist ./dist
 # Expose the port your app runs on
 EXPOSE 8000
 
+# Seed DB
+RUN yarn db:seed-user
+RUN yarn db:seed-post
+
 # Define the command to run your app
-CMD ["node", "dist/index.js"]
+CMD ["yarn", "start"]

@@ -1,26 +1,42 @@
 version: "3.8"
+
 services:
     backend:
-        build: ./backend/.dockerfile
+        build:
+            context: ./backend
+            dockerfile: .dockerfile
         ports:
             - "8000:8000"
         environment:
-            - DB_HOST=db
-            - DB_USER=postgres
-            - DB_PASSWORD=dbpgAdmin
-            - DB_NAME=skinx
+            DB_HOST: db
+            DB_PORT: 5432
+            DB_USER: postgres
+            DB_PASSWORD: pgdb
+            DB_DATABASE: skinx
+            NODE_ENV: development
+            PORT: 8000
+            JWT_SECRET: 380efd7b98c6f423e2736c4f
         depends_on:
             - db
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: .dockerfile
+        ports:
+            - "3000:3000"
+        environment:
+            REACT_APP_ENV: DEVELOPMENT
+            REACT_APP_API: http://backend:8000
+
     db:
         image: postgres:latest
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=dbpgAdmin
-            - POSTGRES_DB=skinx
+            POSTGRES_DB: skinx
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: pgdb
         volumes:
-            - postgres_data:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
+            - pgdata:/var/lib/postgresql/data
 
 volumes:
-    postgres_data:
+    pgdata:

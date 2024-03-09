@@ -1,5 +1,5 @@
 import PostItemComponent from "@/components/PostItemComponent";
-import { PaginationInterface, PostInterface, QueryInterface } from "@/interfaces/post.interface";
+import { PaginationInterface, PostInterface, QueryInterface, TagInterface } from "@/interfaces/post.interface";
 import Axios from "@/modules/axios";
 import PostAPIService from "@/modules/post.api";
 import dayjs from "dayjs";
@@ -29,7 +29,7 @@ const PostView = () => {
 
         // fetch tags
         const responseTags = await PostAPIService.list_tags();
-        if (responseTags.status === 200) setTags(Array.from(responseTags.data.data || []).map((item) => item.tag));
+        if (responseTags.status === 200) setTags(Array.from(responseTags.data.data || []).map((item) => (item as TagInterface).tag));
 
         const response = await PostAPIService.list({ ...query, page, per_page });
         if (response.status === 200) {
