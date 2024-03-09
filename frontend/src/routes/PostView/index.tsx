@@ -1,3 +1,5 @@
+import PostItemComponent from "@/components/PostItemComponent";
+import { PostInterface } from "@/interfaces/post.interface";
 import Axios from "@/modules/axios";
 import dayjs from "dayjs";
 import { Badge } from "primereact/badge";
@@ -18,20 +20,6 @@ interface PaginationInterface {
     per_page: number;
     totle: number;
     start_at: number;
-}
-
-interface TagInterface {
-    id: number;
-    tag: string;
-}
-
-interface PostInterface {
-    id: number;
-    title: string;
-    content: string;
-    postedAt: Date;
-    postedBy: string;
-    tags: TagInterface[];
 }
 
 const PostView = () => {
@@ -67,23 +55,12 @@ const PostView = () => {
             {!loading && (
                 <div className="flex flex-col gap-2  w-full sm:p-[24px] p-[16px]">
                     {records.map((record) => (
-                        <div key={`post-${record.id}`} className="flex flex-col border-b py-2 w-full">
-                            <p className="font-bold text-[1rem] text-primary hover:cursor-pointer hover:text-secondary">{record.title}</p>
-                            <div className="text-[0.6rem] py-[8px]" dangerouslySetInnerHTML={{ __html: String(record.content).substring(0, 100) + "..." }} />
-                            <div className="flex justify-between items-end">
-                                <div className="flex gap-1 flex-wrap w-3/5">
-                                    {Array.from(record.tags).map((item) => (
-                                        <div key={`post-${record.id}-${item.id}`} className="p-1 bg-secondary text-[0.6rem] text-white rounded-md">
-                                            {item.tag}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="text-[0.7rem] text-slate-600">ผู้เขียน {record.postedBy}</p>
-                                    <p className="text-[0.7rem] text-slate-600">เมื่อ {dayjs(record.postedAt).format("DD-MM-YYYY HH:MM")}</p>
-                                </div>
-                            </div>
-                        </div>
+                        <PostItemComponent
+                            onShowModal={() => setSelectedID(record.id)}
+                            onHideModal={() => setSelectedID(null)}
+                            contentVisible={selectedID !== null && record.id === selectedID}
+                            record={record}
+                        />
                     ))}
                 </div>
             )}
