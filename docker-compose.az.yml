@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
     backend:
-        build:
-            context: ./backend
-            dockerfile: .dockerfile
+        image: supakornhobby.azurecr.io/web-article-test-backend:latest
         ports:
             - "8000:8000"
         environment:
@@ -12,7 +10,7 @@ services:
             DB_PORT: 5432
             DB_USER: postgres
             DB_PASSWORD: pgdb
-            DB_DATABASE: articleweb
+            DB_DATABASE: web-article
             NODE_ENV: development
             PORT: 8000
             JWT_SECRET: 380efd7b98c6f423e2736c4f
@@ -20,9 +18,7 @@ services:
             - db
 
     frontend:
-        build:
-            context: ./frontend
-            dockerfile: .dockerfile
+        image: supakornhobby.azurecr.io/web-article-test-frontend:latest
         ports:
             - "3000:3000"
         environment:
@@ -33,7 +29,7 @@ services:
     db:
         image: postgres:latest
         environment:
-            POSTGRES_DB: articleweb
+            POSTGRES_DB: web-article
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: pgdb
         volumes:

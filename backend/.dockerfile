@@ -1,5 +1,5 @@
 # Specify the base image for the build stage
-FROM node:18 as builder
+FROM node:18
 
 # Set the working directory in the Docker image
 WORKDIR /usr/src/app
